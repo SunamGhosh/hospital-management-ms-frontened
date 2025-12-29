@@ -1,0 +1,39 @@
+.appointments-page {
+  padding: 0;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filters .search-bar {
+  flex: 1;
+}
+
+.date-filter {
+  position: relative;
+  min-width: 200px;
+}
+
+.date-filter input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.date-filter input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+  }
+}
+
