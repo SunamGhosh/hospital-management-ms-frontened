@@ -326,3 +326,4 @@ const MedicalRecords = () => {
 
 export default MedicalRecords;
 
+
