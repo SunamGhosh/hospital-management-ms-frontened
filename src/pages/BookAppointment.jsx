@@ -72,10 +72,10 @@ const BookAppointment = () => {
           date: formData.appointment_date,
         },
       });
-      
+
       const bookedSlots = (response.data || []).map(apt => apt.appointment_time);
-      const doctor = doctors.find(d => d.id === parseInt(formData.doctor_id));
-      
+      const doctor = doctors.find(d => d._id === formData.doctor_id);
+
       if (doctor && doctor.available_time_start && doctor.available_time_end) {
         const slots = generateTimeSlots(doctor.available_time_start, doctor.available_time_end);
         const available = slots.filter(slot => !bookedSlots.includes(slot));
@@ -93,10 +93,10 @@ const BookAppointment = () => {
     const slots = [];
     const [startHour, startMin] = start.split(':').map(Number);
     const [endHour, endMin] = end.split(':').map(Number);
-    
+
     let currentHour = startHour;
     let currentMin = startMin;
-    
+
     while (currentHour < endHour || (currentHour === endHour && currentMin < endMin)) {
       slots.push(`${String(currentHour).padStart(2, '0')}:${String(currentMin).padStart(2, '0')}`);
       currentMin += 30;
@@ -105,7 +105,7 @@ const BookAppointment = () => {
         currentHour++;
       }
     }
-    
+
     return slots;
   };
 
@@ -115,7 +115,7 @@ const BookAppointment = () => {
       [e.target.name]: e.target.value,
     });
     if (e.target.name === 'doctor_id') {
-      const doctor = doctors.find(d => d.id === parseInt(e.target.value));
+      const doctor = doctors.find(d => d._id === e.target.value);
       setSelectedDoctor(doctor);
     }
   };
@@ -132,7 +132,7 @@ const BookAppointment = () => {
 
       const appointmentData = {
         ...formData,
-        patient_id: patient.id,
+        patient_id: patient._id,
       };
 
       await api.post('/api/appointments', appointmentData);
@@ -156,7 +156,7 @@ const BookAppointment = () => {
   };
 
   const filteredDoctors = doctors.filter(doctor => {
-    const matchesSearch = !searchTerm || 
+    const matchesSearch = !searchTerm ||
       `${doctor.first_name} ${doctor.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
       doctor.specialization.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesSearch;
@@ -179,7 +179,7 @@ const BookAppointment = () => {
       <form onSubmit={handleSubmit} className="appointment-form">
         <div className="form-section">
           <h2>Select Doctor</h2>
-          
+
           <div className="filter-group">
             <div className="search-box">
               <FiSearch />
@@ -207,10 +207,10 @@ const BookAppointment = () => {
           <div className="doctors-grid">
             {filteredDoctors.map(doctor => (
               <div
-                key={doctor.id}
-                className={`doctor-card ${formData.doctor_id === doctor.id.toString() ? 'selected' : ''}`}
+                key={doctor._id}
+                className={`doctor-card ${formData.doctor_id === doctor._id ? 'selected' : ''}`}
                 onClick={() => {
-                  setFormData({ ...formData, doctor_id: doctor.id.toString() });
+                  setFormData({ ...formData, doctor_id: doctor._id });
                   setSelectedDoctor(doctor);
                 }}
               >
@@ -219,7 +219,7 @@ const BookAppointment = () => {
                   <p className="specialization">{doctor.specialization}</p>
                   <p className="qualification">{doctor.qualification}</p>
                   <p className="experience">{doctor.experience_years} years experience</p>
-                  <p className="fee">Fee: ${doctor.consultation_fee}</p>
+                  <p className="fee">Fee: ₹{doctor.consultation_fee}</p>
                   <p className="availability">
                     Available: {doctor.available_days} ({doctor.available_time_start} - {doctor.available_time_end})
                   </p>
@@ -232,7 +232,7 @@ const BookAppointment = () => {
         {selectedDoctor && (
           <div className="form-section">
             <h2>Appointment Details</h2>
-            
+
             <div className="form-group">
               <label htmlFor="appointment_date">
                 <FiCalendar /> Appointment Date

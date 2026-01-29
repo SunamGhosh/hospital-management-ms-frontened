@@ -172,7 +172,7 @@ const Doctors = () => {
                   <td>{doctor.specialization}</td>
                   <td>{doctor.phone || '-'}</td>
                   <td>{doctor.email || '-'}</td>
-                  <td>${doctor.consultation_fee || '-'}</td>
+                  <td>₹{doctor.consultation_fee || '-'}</td>
                   <td>
                     <span className={`status-badge status-${doctor.status}`}>
                       {doctor.status}

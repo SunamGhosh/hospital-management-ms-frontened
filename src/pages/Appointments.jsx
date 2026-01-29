@@ -71,7 +71,7 @@ const Appointments = () => {
     e.preventDefault();
     try {
       if (editingAppointment) {
-        await api.put(`/api/appointments/${editingAppointment.id}`, formData);
+        await api.put(`/api/appointments/${editingAppointment._id}`, formData);
       } else {
         await api.post('/api/appointments', formData);
       }
@@ -100,10 +100,10 @@ const Appointments = () => {
   };
 
   const handleDelete = async (id) => {
-    const confirmMessage = user?.role === 'customer' 
+    const confirmMessage = user?.role === 'customer'
       ? 'Are you sure you want to cancel this appointment?'
       : 'Are you sure you want to delete this appointment?';
-    
+
     if (window.confirm(confirmMessage)) {
       try {
         await api.delete(`/api/appointments/${id}`);
@@ -112,6 +112,16 @@ const Appointments = () => {
         console.error('Error deleting appointment:', error);
         alert(error.response?.data?.error || 'Error deleting appointment');
       }
+    }
+  };
+
+  const handleStatusUpdate = async (appointmentId, newStatus) => {
+    try {
+      await api.patch(`/api/appointments/${appointmentId}/status`, { status: newStatus });
+      fetchAppointments();
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
+      alert(error.response?.data?.error || 'Error updating appointment status');
     }
   };
 
@@ -139,9 +149,9 @@ const Appointments = () => {
     <div className="appointments-page">
       <div className="page-header">
         <h1 className="page-title">
-          {user?.role === 'customer' ? 'My Appointments' : 
-           user?.role === 'doctor' ? 'My Appointments' : 
-           'Appointments'}
+          {user?.role === 'customer' ? 'My Appointments' :
+            user?.role === 'doctor' ? 'My Appointments' :
+              'Appointments'}
         </h1>
         {canCreateAppointment && (
           <button className="btn-primary" onClick={() => { setShowModal(true); setEditingAppointment(null); resetForm(); }}>
@@ -196,15 +206,15 @@ const Appointments = () => {
               </tr>
             ) : (
               appointments.map((appointment) => (
-                <tr key={appointment.id}>
+                <tr key={appointment._id}>
                   <td>{appointment.appointment_id}</td>
                   <td>
-                    {appointment.patient_first_name} {appointment.patient_last_name}
+                    {appointment.patient_id?.first_name} {appointment.patient_id?.last_name}
                   </td>
                   <td>
-                    Dr. {appointment.doctor_first_name} {appointment.doctor_last_name}
+                    Dr. {appointment.doctor_id?.first_name} {appointment.doctor_id?.last_name}
                     <br />
-                    <small style={{ color: '#6b7280' }}>{appointment.specialization}</small>
+                    <small style={{ color: '#6b7280' }}>{appointment.doctor_id?.specialization}</small>
                   </td>
                   <td>{new Date(appointment.appointment_date).toLocaleDateString()}</td>
                   <td>{appointment.appointment_time}</td>
@@ -215,13 +225,22 @@ const Appointments = () => {
                     </span>
                   </td>
                   <td>
+                    {user?.role === 'doctor' && appointment.status === 'scheduled' && (
+                      <button
+                        className="btn-icon btn-success"
+                        onClick={() => handleStatusUpdate(appointment._id, 'completed')}
+                        title="Mark as Completed"
+                      >
+                        ✓
+                      </button>
+                    )}
                     {canEditAppointment && (
                       <button className="btn-icon" onClick={() => handleEdit(appointment)}>
                         <FiEdit />
                       </button>
                     )}
                     {canDeleteAppointment && (
-                      <button className="btn-icon btn-danger" onClick={() => handleDelete(appointment.id)}>
+                      <button className="btn-icon btn-danger" onClick={() => handleDelete(appointment._id)}>
                         <FiTrash2 />
                       </button>
                     )}
@@ -249,7 +268,7 @@ const Appointments = () => {
                     >
                       <option value="">Select Patient</option>
                       {patients.map((patient) => (
-                        <option key={patient.id} value={patient.id}>
+                        <option key={patient._id} value={patient._id}>
                           {patient.first_name} {patient.last_name} ({patient.patient_id})
                         </option>
                       ))}
@@ -265,7 +284,7 @@ const Appointments = () => {
                   >
                     <option value="">Select Doctor</option>
                     {doctors.map((doctor) => (
-                      <option key={doctor.id} value={doctor.id}>
+                      <option key={doctor._id} value={doctor._id}>
                         Dr. {doctor.first_name} {doctor.last_name} - {doctor.specialization}
                       </option>
                     ))}

@@ -74,7 +74,7 @@ const MedicalRecords = () => {
     e.preventDefault();
     try {
       if (editingRecord) {
-        await api.put(`/api/medical-records/${editingRecord.id}`, formData);
+        await api.put(`/api/medical-records/${editingRecord._id}`, formData);
       } else {
         await api.post('/api/medical-records', formData);
       }
@@ -91,9 +91,9 @@ const MedicalRecords = () => {
   const handleEdit = (record) => {
     setEditingRecord(record);
     setFormData({
-      patient_id: record.patient_id || '',
-      doctor_id: record.doctor_id || '',
-      appointment_id: record.appointment_id || '',
+      patient_id: record.patient_id?._id || record.patient_id || '',
+      doctor_id: record.doctor_id?._id || record.doctor_id || '',
+      appointment_id: record.appointment_id?._id || record.appointment_id || '',
       diagnosis: record.diagnosis || '',
       symptoms: record.symptoms || '',
       prescription: record.prescription || '',
@@ -172,17 +172,17 @@ const MedicalRecords = () => {
               </tr>
             ) : (
               records.map((record) => (
-                <tr key={record.id}>
+                <tr key={record._id}>
                   <td>{record.record_id}</td>
                   <td>
-                    {record.patient_first_name} {record.patient_last_name}
+                    {record.patient_id?.first_name} {record.patient_id?.last_name}
                     <br />
-                    <small style={{ color: '#6b7280' }}>{record.patient_code}</small>
+                    <small style={{ color: '#6b7280' }}>{record.patient_id?.patient_id}</small>
                   </td>
                   <td>
-                    Dr. {record.doctor_first_name} {record.doctor_last_name}
+                    Dr. {record.doctor_id?.first_name} {record.doctor_id?.last_name}
                     <br />
-                    <small style={{ color: '#6b7280' }}>{record.specialization}</small>
+                    <small style={{ color: '#6b7280' }}>{record.doctor_id?.specialization}</small>
                   </td>
                   <td>{new Date(record.visit_date).toLocaleDateString()}</td>
                   <td>{record.diagnosis || '-'}</td>
@@ -190,7 +190,7 @@ const MedicalRecords = () => {
                     <button className="btn-icon" onClick={() => handleEdit(record)}>
                       <FiEdit />
                     </button>
-                    <button className="btn-icon btn-danger" onClick={() => handleDelete(record.id)}>
+                    <button className="btn-icon btn-danger" onClick={() => handleDelete(record._id)}>
                       <FiTrash2 />
                     </button>
                   </td>
@@ -216,7 +216,7 @@ const MedicalRecords = () => {
                   >
                     <option value="">Select Patient</option>
                     {patients.map((patient) => (
-                      <option key={patient.id} value={patient.id}>
+                      <option key={patient._id} value={patient._id}>
                         {patient.first_name} {patient.last_name} ({patient.patient_id})
                       </option>
                     ))}
@@ -231,7 +231,7 @@ const MedicalRecords = () => {
                   >
                     <option value="">Select Doctor</option>
                     {doctors.map((doctor) => (
-                      <option key={doctor.id} value={doctor.id}>
+                      <option key={doctor._id} value={doctor._id}>
                         Dr. {doctor.first_name} {doctor.last_name} - {doctor.specialization}
                       </option>
                     ))}
@@ -247,9 +247,9 @@ const MedicalRecords = () => {
                   >
                     <option value="">Select Appointment</option>
                     {appointments
-                      .filter(apt => apt.patient_id == formData.patient_id)
+                      .filter(apt => apt.patient_id?._id === formData.patient_id || apt.patient_id === formData.patient_id)
                       .map((appointment) => (
-                        <option key={appointment.id} value={appointment.id}>
+                        <option key={appointment._id} value={appointment._id}>
                           {new Date(appointment.appointment_date).toLocaleDateString()} - {appointment.appointment_time}
                         </option>
                       ))}

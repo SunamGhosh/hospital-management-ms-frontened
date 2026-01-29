@@ -24,6 +24,47 @@
   width: 70px;
 }
 
+.sidebar-overlay {
+  display: none;
+}
+
+/* Mobile Header - Hidden on Desktop */
+.mobile-header {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+}
+
+.mobile-toggle {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #1f2937;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.mobile-toggle:hover {
+  background-color: #f3f4f6;
+}
+
+.mobile-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
 .sidebar-header {
   padding: 1.5rem;
   display: flex;
@@ -171,17 +212,56 @@
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
+    width: 250px !important;
+    /* Always full width on mobile when open */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   }
 
   .sidebar.open {
     transform: translateX(0);
   }
 
+  /* Show overlay on mobile when sidebar is open */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 950;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
   .main-content {
+    margin-left: 0;
+  }
+
+  .sidebar.closed~.main-content {
     margin-left: 0;
   }
 
   .content-wrapper {
     padding: 1rem;
+  }
+
+  .mobile-header {
+    display: flex;
+  }
+
+  /* Show close button in sidebar on mobile, hide if not needed, but here we want it */
+  .sidebar-toggle {
+    display: flex;
   }
 }

@@ -56,6 +56,7 @@ const Layout = () => {
 
   return (
     <div className="layout">
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
       <div className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
           <h2>Hospital MS</h2>
@@ -100,6 +101,17 @@ const Layout = () => {
         </div>
       </div>
       <div className="main-content">
+        {/* Mobile Header */}
+        <div className="mobile-header">
+          <button
+            className="mobile-toggle"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <FiMenu />
+          </button>
+          <h2 className="mobile-brand">Hospital MS</h2>
+        </div>
+
         <div className="content-wrapper">
           <Outlet />
         </div>
