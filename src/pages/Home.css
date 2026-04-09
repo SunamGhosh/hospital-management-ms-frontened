@@ -224,9 +224,15 @@
 }
 
 .card-4 {
-  bottom: 10%;
-  right: 20%;
+  bottom: 0%;
+  right: 15%;
   animation-delay: 1.5s;
+}
+
+.card-5 {
+  top: 50%;
+  left: 0%;
+  animation-delay: 2s;
 }
 
 @keyframes float {

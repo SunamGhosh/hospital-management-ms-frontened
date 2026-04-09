@@ -13,6 +13,7 @@ import {
   FiHeart,
   FiClock,
   FiLock,
+  FiBox,
 } from 'react-icons/fi';
 import './Home.css';
 
@@ -51,6 +52,11 @@ const Home = () => {
       title: 'Analytics Dashboard',
       description: 'Real-time statistics and insights for better decision making.',
     },
+    {
+      icon: <FiBox />,
+      title: 'Pharmacy Management',
+      description: 'Manage medicine inventory, stock levels, and pharmacy operations.',
+    },
   ];
 
   const benefits = [
@@ -59,6 +65,7 @@ const Home = () => {
     'Secure medical records storage',
     'Role-based access control',
     'Real-time analytics and reporting',
+    'Integrated pharmacy inventory management',
     'Easy-to-use interface',
   ];
 
@@ -72,6 +79,9 @@ const Home = () => {
             <span>Hospital MS</span>
           </div>
           <div className="nav-links">
+            <Link to="/pharmacy" className="nav-link">
+              Pharmacy
+            </Link>
             {user ? (
               <Link to="/app/dashboard" className="nav-link btn-primary">
                 Go to Dashboard
@@ -169,6 +179,10 @@ const Home = () => {
             <div className="floating-card card-4">
               <FiFileText />
               <span>Records</span>
+            </div>
+            <div className="floating-card card-5">
+              <FiBox />
+              <span>Pharmacy</span>
             </div>
           </div>
         </div>
@@ -300,6 +314,7 @@ const Home = () => {
                 <li>Patient Management</li>
                 <li>Appointment Scheduling</li>
                 <li>Medical Records</li>
+                <li>Pharmacy Management</li>
                 <li>Analytics Dashboard</li>
               </ul>
             </div>

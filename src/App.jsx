@@ -11,6 +11,8 @@ import Appointments from './pages/Appointments';
 import MedicalRecords from './pages/MedicalRecords';
 import BookAppointment from './pages/BookAppointment';
 import Admins from './pages/Admins';
+import Pharmacy from './pages/Pharmacy';
+import PublicPharmacy from './pages/PublicPharmacy';
 import Layout from './components/Layout';
 import './App.css';
 
@@ -21,6 +23,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/pharmacy" element={<PublicPharmacy />} />
           <Route
             path="/app"
             element={
@@ -37,6 +40,7 @@ function App() {
             <Route path="medical-records" element={<MedicalRecords />} />
             <Route path="book-appointment" element={<BookAppointment />} />
             <Route path="admins" element={<Admins />} />
+            <Route path="pharmacy" element={<Pharmacy />} />
           </Route>
         </Routes>
       </Router>

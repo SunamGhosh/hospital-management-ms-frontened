@@ -11,6 +11,7 @@ import {
   FiX,
   FiLogOut,
   FiShield,
+  FiBox,
 } from 'react-icons/fi';
 import './Layout.css';
 
@@ -33,6 +34,7 @@ const Layout = () => {
         { path: '/app/appointments', icon: FiCalendar, label: 'Appointments' },
         { path: '/app/medical-records', icon: FiFileText, label: 'Medical Records' },
         { path: '/app/admins', icon: FiShield, label: 'Admins' },
+        { path: '/app/pharmacy', icon: FiBox, label: 'Pharmacy' },
       ];
     } else if (role === 'doctor') {
       return [
